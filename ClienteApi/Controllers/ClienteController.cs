@@ -29,7 +29,7 @@ namespace ClienteApi.Comum
             }
             catch (Exception e)
             {
-                return StatusCode(500, new ErroDto() { mensagens = new List<String>() { e.Message } });
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace ClienteApi.Comum
             }
             catch (Exception e)
             {
-                return StatusCode(500, new ErroDto() { mensagens = new List<String>() { e.Message } });
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -78,7 +78,7 @@ namespace ClienteApi.Comum
             }
             catch (Exception e)
             {
-                return StatusCode(500, new ErroDto() { mensagens = new List<string>() { e.Message } });
+                return Ok();
             }
         }
     }
