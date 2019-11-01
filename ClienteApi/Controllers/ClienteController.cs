@@ -78,7 +78,7 @@ namespace ClienteApi.Comum
             }
             catch (Exception e)
             {
-                return Ok();
+                return StatusCode(500, e.Message);
             }
         }
     }
