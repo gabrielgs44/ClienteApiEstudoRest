@@ -1,10 +1,10 @@
-﻿using ClienteApi.Comum.Dto;
+﻿using AutoMapper;
+using ClienteApi.Comum.Dto;
+using ClienteApi.Comum.Exceptions;
 using ClienteApi.Models;
-using System;
-using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
-using ClienteApi.Comum.Exceptions;
+using System.Threading.Tasks;
 
 namespace ClienteApi.Services
 {
@@ -17,20 +17,20 @@ namespace ClienteApi.Services
             _context = context;
         }
 
-        public Cliente CadastrarCliente(ClienteDto clienteDto)
+        public async Task<Cliente> CadastrarCliente(ClienteDto clienteDto)
         {
             var cliente = Cliente.Criar(clienteDto.Id, clienteDto.Nome, clienteDto.Login, clienteDto.Senha);
-            _context.Add(cliente);
-            _context.SaveChanges();
+            await _context.AddAsync(cliente);
+            await _context.SaveChangesAsync();
 
             return cliente;
         }
 
-        public IEnumerable<Cliente> ObterClientes(int? id)
+        public async Task<IEnumerable<Cliente>> ObterClientes(int? id)
         {
             if (id.HasValue)
             {
-                return new List<Cliente>() { _context.Find<Cliente>(id.Value) };
+                return new List<Cliente>() { await _context.FindAsync<Cliente>(id.Value) };
             }
             else
             {
@@ -38,7 +38,7 @@ namespace ClienteApi.Services
             }
         }
 
-        public string RemoverCliente(int? id)
+        public async Task<string> RemoverCliente(int? id)
         {
             if (id.HasValue)
             {
@@ -47,7 +47,7 @@ namespace ClienteApi.Services
                 if (cliente != null)
                 {
                     _context.Remove(cliente);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     return "Cliente removido!";
                 }
                 else
@@ -59,9 +59,9 @@ namespace ClienteApi.Services
             throw new NaoEncontradoException("Cliente não encontrado!");
         }
 
-        public string AtualizarCliente(ClienteDto clienteDto)
+        public async Task<string> AtualizarCliente(ClienteDto clienteDto)
         {
-            if(!_context.Cliente.Any(x => x.Id == clienteDto.Id))
+            if (!_context.Cliente.Any(x => x.Id == clienteDto.Id))
             {
                 throw new NaoEncontradoException("Id não foi encontrado!");
             }
@@ -76,7 +76,7 @@ namespace ClienteApi.Services
 
                 var cliente = mapper.Map<Cliente>(clienteDto);
                 _context.Cliente.Update(cliente);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return "Atualizado!";
             }
         }
