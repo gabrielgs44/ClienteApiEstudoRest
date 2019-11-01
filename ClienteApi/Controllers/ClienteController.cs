@@ -23,7 +23,7 @@ namespace ClienteApi.Comum
         {
             try
             {
-                var clienteCriado = _clienteService.CadastrarCliente(cliente);
+                var clienteCriado = _clienteService.CadastrarCliente(cliente).Result;
                 return Created("Cliente/" + clienteCriado.Id, clienteCriado);
 
             }
@@ -39,7 +39,7 @@ namespace ClienteApi.Comum
         {
             try
             {
-                return Ok(_clienteService.ObterClientes(id));
+                return Ok(_clienteService.ObterClientes(id).Result);
             }
             catch (Exception e)
             {
@@ -53,7 +53,7 @@ namespace ClienteApi.Comum
         {
             try
             {
-                var mensagem = _clienteService.RemoverCliente(id);
+                var mensagem = _clienteService.RemoverCliente(id).Result;
                 return Ok(mensagem);
 
             }
@@ -73,7 +73,7 @@ namespace ClienteApi.Comum
         {
             try
             {
-                var mensagem = _clienteService.AtualizarCliente(clienteDto);
+                var mensagem = _clienteService.AtualizarCliente(clienteDto).Result;
                 return Ok(mensagem);
             }
             catch (Exception e)
